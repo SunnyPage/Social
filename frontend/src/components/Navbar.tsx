@@ -17,6 +17,8 @@ import { Socket } from 'socket.io-client';
 
 import { ServerToClientEvents, ClientToServerEvents } from '../interfaces';
 
+import { useTranslation } from 'react-i18next';
+
 type NavbarProps = {
   socket?: React.MutableRefObject<Socket<
     ServerToClientEvents,
@@ -28,9 +30,16 @@ const Navbar: React.FC<NavbarProps> = ({ socket }) => {
   const { user, friendRequests } = useAppSelector((state) => state.user);
   const [search, setSearch] = useState('');
   const [showInfo, setShowInfo] = useState(false);
+  const [showLanguageInfo, setShowLanguageInfo] = useState(false);
   const [users, setUsers] = useState<IUser[]>([]);
   const dispatch = useAppDispatch();
   const modal = useRef<any>();
+
+  const { t, i18n } = useTranslation();
+
+  function changeLanguage(e: any) {
+    i18n.changeLanguage(e.target.value);
+  }
 
   useEffect(() => {
     const closeModal = (e: any) => {
@@ -40,6 +49,7 @@ const Navbar: React.FC<NavbarProps> = ({ socket }) => {
         // e.target === modal.current?.parentElement
       )
         setShowInfo(false);
+        setShowLanguageInfo(false);
     };
     window.addEventListener('click', closeModal);
     return () => window.removeEventListener('click', closeModal);
@@ -218,6 +228,78 @@ const Navbar: React.FC<NavbarProps> = ({ socket }) => {
         <div
           className="flex px-2 h-full items-center gap-2 ml-4 md:ml-8 relative  hover:bg-gray-100 cursor-pointer profile-section"
           onClick={(e) => {
+            setShowLanguageInfo(!showLanguageInfo);
+            e.stopPropagation();
+          }}
+        >
+          <div>{i18n.language}</div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className={`h-4 w-4  transition duration-300 text-gray-600 ${
+              showLanguageInfo && 'rotate-180'
+            }`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+
+          <div
+            ref={modal}
+            className={`info flex flex-col w-[250%]  bg-white border border-gray-200 shadow rounded absolute top-[55px] right-0 transition duration-150 text-sm text-gray-500 font-semibold origin-top-right ${
+              showLanguageInfo && 'active'
+            }`}
+          >
+            <span
+              className="p-2 hover:bg-gray-100 cursor-pointer flex gap-1  hover:underline items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 text-[#5181b8]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                />
+              </svg>
+              <button onClick={changeLanguage} value='ge'>{t('Georgian')}</button>
+            </span>
+            <span
+              className="p-2 hover:bg-gray-100 cursor-pointer flex gap-1  hover:underline items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 text-[#5181b8]"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                />
+              </svg>
+              <button onClick={changeLanguage} value='en'>{t('English')}</button>
+            </span>
+          </div>
+        </div>
+
+        <div
+          className="flex px-2 h-full items-center gap-2 ml-4 md:ml-8 relative  hover:bg-gray-100 cursor-pointer profile-section"
+          onClick={(e) => {
             setShowInfo(!showInfo);
             e.stopPropagation();
           }}
@@ -292,7 +374,7 @@ const Navbar: React.FC<NavbarProps> = ({ socket }) => {
                   d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
                 />
               </svg>
-              News
+              {t('News')}
             </Link>
             <span
               className="p-2 hover:bg-gray-100 cursor-pointer flex gap-1  hover:underline items-center"

@@ -55,7 +55,7 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: 'https://project-social.netlify.app',
+    origin: 'http://localhost:3000',
     credentials: true,
   })
 );

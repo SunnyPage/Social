@@ -33,7 +33,7 @@ import { ProfileInfoContextProvider } from './context';
 import sound from './sounds/notification.mp3';
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://social-backend-production.up.railway.app/api';
+axios.defaults.baseURL = 'http://localhost:5000/api';
 axios.defaults.withCredentials = true;
 
 const App = () => {
@@ -59,7 +59,7 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      socket.current = io('https://social-backend-production.up.railway.app');
+      socket.current = io('http://localhost:5000');
       socket?.current?.emit('addUser', user?._id);
       socket?.current?.on('getUsers', (users) => {
         dispatch(setOnlineUsers(users));
