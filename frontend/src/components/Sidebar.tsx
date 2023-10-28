@@ -123,7 +123,7 @@ const Sidebar = () => {
                   fillRule="evenodd"
                 ></path>
               </svg>
-              <span className="text-sm">Communities</span>
+              <span className="text-sm">{t('Communities')}</span>
             </li>
           </Link>
           <hr className="my-2" />
