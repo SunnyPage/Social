@@ -8,8 +8,18 @@ import {
   Confirm,
   NotFound,
   ResetPassword,
-  UpdatePassword,
+  UpdatePassword
 } from './pages';
+
+import {
+  Admin,
+  UserList,
+  UserSingle,
+  UserNew
+} from './admin/pages';
+
+import { productInputs, userInputs } from "./formSource";
+
 import { ProtectedRoute, SharedLayout } from './components';
 import { Routes, Route } from 'react-router-dom';
 import { io, Socket } from 'socket.io-client';
@@ -130,6 +140,35 @@ const App = () => {
       <Route path='/password/reset' element={<ResetPassword />} />
       <Route path='/password/reset/:token' element={<UpdatePassword />} />
       <Route path='*' element={<NotFound />} />
+      <Route path='/admin'>
+            <Route index element={
+                <ProtectedRoute>
+                    <Admin/>
+                </ProtectedRoute>
+            }/>
+            <Route element={
+                <ProtectedRoute>
+                    <UserList/>
+                </ProtectedRoute>
+            }/>
+            <Route path=':userId' element={
+                <ProtectedRoute>
+                    <UserSingle/>
+               </ProtectedRoute>
+            }/>
+           <Route
+               path="new"
+               element={
+                    <ProtectedRoute>
+                        <UserNew inputs={userInputs} title="Add New User" />
+                    </ProtectedRoute>
+               }
+             />
+           <Route path="products">
+             <Route index element={<UserList />} />
+             <Route path=":productId" element={<UserSingle />} />
+           </Route>
+      </Route>
     </Routes>
   );
 };
